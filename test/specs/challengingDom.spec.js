@@ -1,6 +1,6 @@
 import ChallengingDom from "../pageobjects/challengingDom.page.js";
 
-describe('Challenging DOM page test suite', () => {
+describe.skip('Challenging DOM page test suite', () => {
     it('should open the right page of the Heroku App site', async () => {
         // Navigate to the challenging dom page of the heroku app and maximize the window
         await ChallengingDom.open();

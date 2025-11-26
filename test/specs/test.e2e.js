@@ -2,17 +2,45 @@ import { expect } from '@wdio/globals'
 import LoginPage from '../pageobjects/login.page.js'
 import SecurePage from '../pageobjects/secure.page.js'
 import CheckBoxesPage from '../pageobjects/checkboxes.page.js'
+import { TestData } from '../login.data.js'
 
+// Original login test with the hardcoded credentials
 describe.skip('My Login application', () => {
-    it('should login with valid credentials', async () => {
+    it('should login with valid hardcoded credentials', async () => {
         await LoginPage.open()
-
+        await browser.maximizeWindow();
         await LoginPage.login('tomsmith', 'SuperSecretPassword!')
         await expect(SecurePage.flashAlert).toBeExisting()
         await expect(SecurePage.flashAlert).toHaveText(
             expect.stringContaining('You logged into a secure area!'))
         await expect(SecurePage.flashAlert).toMatchElementSnapshot('flashAlert')
     })
+})
+
+// New login test using the TestData class for credentials
+describe('My Login application, both valid and invalid using separate test data', () => {
+    it('should login with valid credentials from login.data.js', async () => {
+        await LoginPage.open()
+        await browser.maximizeWindow();
+        // Hardcoded valid login information removed, replaced with TestData class and object usage.
+        // This improves maintainability and readability of the test code.
+        // TestData is the class, validUser is the object and username / password are the properties within the object.
+        await LoginPage.login(TestData.validUser.username, TestData.validUser.password)
+        await expect(SecurePage.flashAlert).toBeExisting()
+        await expect(SecurePage.flashAlert).toHaveText(
+            expect.stringContaining('You logged into a secure area!'))
+        await expect(SecurePage.flashAlert).toMatchElementSnapshot('flashAlert')
+    })
+    it('should attempt to login with invalid credentials from login.data.js', async () => {
+        await LoginPage.open()
+        await browser.maximizeWindow();
+        // Hardcoded invalid login information replaced with TestData class and object usage.
+        // This improves maintainability and readability of the test code.
+        // TestData is the class, validUser is the object and username / password are the properties within the object.
+        await LoginPage.login(TestData.invalidUser.username, TestData.invalidUser.password)
+        await expect(LoginPage.flashAlert).toBeExisting(
+            expect.stringContaining('Your username is invalid!'))
+    });
 })
 
 describe.skip('Confirm check boxes', () => {
